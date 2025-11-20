@@ -1,9 +1,11 @@
 package com.example.lsmapp.composables
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,20 +18,46 @@ import com.example.lsmapp.screens.ProfileScreen
 import com.example.lsmapp.screens.RankingScreen
 import com.example.lsmapp.screens.SenasScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScaffold(onLogoutClick: () -> Unit, onNavigateToAuth: () -> Unit) {
-    val nav = rememberNavController()
+fun MainScaffold(mainNavController: NavHostController) { // Accept the main NavController
+    val innerNavController = rememberNavController() // A new NavController for the bottom bar
+    val currentRoute = currentRoute(innerNavController)
+
+    val title = when (currentRoute) {
+        Route.Lesson.route -> "Temas"
+        Route.Senas.route -> "Señas"
+        Route.Ranking.route -> "Ranking"
+        Route.Profile.route -> "Perfil"
+        else -> ""
+    }
 
     Scaffold(
-        containerColor = Color(0xFF47525E), // Fondo oscuro del scaffold
-        bottomBar = { BottomNavBar(navController = nav) }
+        containerColor = Color(0xFF47525E),
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFF47525E),
+                    titleContentColor = Color.White
+                )
+            )
+        },
+        bottomBar = { BottomNavBar(navController = innerNavController) } // Use the inner NavController for the bar
     ) { innerPadding ->
         NavHost(
-            navController = nav,
+            navController = innerNavController, // This NavHost also uses the inner controller
             startDestination = Route.Lesson.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Route.Lesson.route) { LessonScreen(navController = nav) }
+            // Pass the MAIN NavController to the screens that need to navigate outside the scaffold
+            composable(Route.Lesson.route) { LessonScreen(navController = mainNavController) }
             composable(Route.Senas.route) { SenasScreen() }
             composable(Route.Ranking.route) { RankingScreen() }
             composable(Route.Profile.route) { ProfileScreen() }

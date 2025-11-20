@@ -6,12 +6,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.outlined.BackHand
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -36,7 +37,7 @@ data class NavItem(
 @Composable
 fun BottomNavBar(navController: NavController, modifier: Modifier = Modifier) {
     val navItems = listOf(
-        NavItem("List", Icons.Default.List, Route.Lesson.route),
+        NavItem("List", Icons.AutoMirrored.Filled.List, Route.Lesson.route),
         NavItem("Hand", Icons.Outlined.BackHand, Route.Senas.route),
         NavItem("Profile", Icons.Default.Face, Route.Ranking.route)
     )
@@ -45,15 +46,17 @@ fun BottomNavBar(navController: NavController, modifier: Modifier = Modifier) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     Surface(
-        modifier = modifier.padding(bottom = 24.dp), // Lifts the bar from the bottom
+        modifier = modifier.padding(bottom = 24.dp, start = 24.dp, end = 24.dp), // Lifts the bar and adds horizontal margin
         shape = RoundedCornerShape(percent = 50), // Creates the pill shape
         color = Color.White,
         tonalElevation = 8.dp,
         shadowElevation = 8.dp
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(25.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.SpaceAround, // Distributes items evenly
             verticalAlignment = Alignment.CenterVertically
         ) {
             navItems.forEach { item ->

@@ -41,40 +41,21 @@ fun SenasScreen(
 
     var selectedSena by remember { mutableStateOf<Sena?>(null) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(PrimaryDarkGrey)
-            .padding(horizontal = 24.dp)
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 16.dp),
+        contentPadding = PaddingValues(bottom = 16.dp)
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = "Señas",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.padding(vertical = 12.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 16.dp)
-        ) {
-            items(filteredSenas) { sena ->
-                SenaCard(
-                    sena = sena,
-                    onClick = {
-                        selectedSena = sena
-                        onSenaClick(sena)
-                    }
-                )
-            }
+        items(filteredSenas) { sena ->
+            SenaCard(
+                sena = sena,
+                onClick = {
+                    selectedSena = sena
+                    onSenaClick(sena)
+                }
+            )
         }
     }
 

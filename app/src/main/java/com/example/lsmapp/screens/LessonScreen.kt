@@ -17,12 +17,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +36,6 @@ import com.example.lsmapp.R
 import com.example.lsmapp.data.model.Lesson
 import com.example.lsmapp.ui.theme.LsmappTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LessonScreen(navController: NavController) {
     val lessons = listOf(
@@ -68,26 +63,13 @@ fun LessonScreen(navController: NavController) {
         )
     )
 
-    Scaffold(
-        containerColor = PrimaryDarkGrey,
-        topBar = {
-            TopAppBar(
-                title = { Text("Temas", fontWeight = FontWeight.Bold, color = TextLinkColor) },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = PrimaryDarkGrey
-                )
-            )
-        }
-    ) { innerPadding ->
-        LazyColumn(
-            contentPadding = innerPadding,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            items(lessons) { lesson ->
-                LessonItem(lesson = lesson) {
-                    navController.navigate("lessonDetail/${lesson.id}")
-                }
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp) // Adjusted padding
+    ) {
+        items(lessons) { lesson ->
+            LessonItem(lesson = lesson) {
+                navController.navigate("lessonDetail/${lesson.id}")
             }
         }
     }

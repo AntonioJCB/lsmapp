@@ -23,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.lsmapp.screens.LogoContainerColor
 import com.example.lsmapp.screens.PrimaryDarkGrey
 import com.example.lsmapp.screens.TextLinkColor
+import com.example.lsmapp.ui.theme.LsmappTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,21 +57,13 @@ fun QuizScreen(
             Spacer(modifier = Modifier.height(16.dp))
             uiState.options.forEach { option ->
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("congratulations/$lessonId") },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = LogoContainerColor)
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White)
                 ) {
-                    Text(text = option, color = TextLinkColor)
+                    Text(text = option, color = Color.Black)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = { navController.navigate("congratulations/$lessonId") },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = LogoContainerColor)
-            ) {
-                Text(text = "Terminar Lección", color = TextLinkColor)
             }
         }
     }
@@ -80,8 +72,10 @@ fun QuizScreen(
 @Preview(showBackground = true)
 @Composable
 fun QuizScreenPreview() {
-    QuizScreen(
-        navController = NavController(LocalContext.current),
-        lessonId = "1"
-    )
+    LsmappTheme {
+        QuizScreen(
+            navController = NavController(LocalContext.current),
+            lessonId = "1"
+        )
+    }
 }
