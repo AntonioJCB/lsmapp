@@ -4,23 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -32,6 +21,9 @@ import com.example.lsmapp.ui.theme.LsmappTheme
 import com.example.lsmapp.viewModel.AppViewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val vm: AppViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -39,52 +31,58 @@ class MainActivity : ComponentActivity() {
             LsmappTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     AppRoot(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        vm = vm
                     )
                 }
             }
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        // Solo cierra la sesión si la app se detiene y no es por un cambio de configuración
+        if (!isChangingConfigurations) {
+            vm.logout()
+        }
+    }
 }
 
 @Composable
-fun AppRoot(modifier: Modifier = Modifier) {
-
-    val vm: AppViewModel = viewModel()
+fun AppRoot(modifier: Modifier = Modifier, vm: AppViewModel) {
     val nav = rememberNavController()
 
-    NavHost(navController = nav, startDestination = Route.Splash.route) {
-        composable(Route.Splash.route) {
-            SplashScreen(
-                vm = vm,
-                nav = nav
-            )
-        }
+    NavHost(navController = nav, startDestination = Route.Auth.route) {
 
-        // AUTH FLOW (sin Drawer/BottomBar)
+        // Flujo de autenticación
         composable(Route.Auth.route) {
             AuthNavHost(
                 onLoggedIn = {
                     vm.login()
                     nav.navigate(Route.Main.route) {
-                        popUpTo(Route.Splash.route) { inclusive = true }
+                        // Limpia el backstack hasta la ruta de autenticación
+                        popUpTo(Route.Auth.route) { inclusive = true }
                         launchSingleTop = true
                     }
-                },
+                }
             )
         }
 
-        // MAIN FLOW (con Scaffold + Drawer + BottomBar)
+        // Flujo principal de la app
         composable(Route.Main.route) {
             MainScaffold(
-                onLogoutClick = { vm.logout() },
+                onLogoutClick = {
+                    vm.logout()
+                    // Limpia toda la pila de navegación y vuelve a la autenticación
+                    nav.navigate(Route.Auth.route) { popUpTo(0) }
+                },
                 onNavigateToAuth = {
-                    nav.navigate(Route.Auth.route) { popUpTo(0) } // limpia back stack
+                    vm.logout()
+                    nav.navigate(Route.Auth.route) { popUpTo(0) }
                 }
             )
         }
     }
-
 }
 
 @Composable
@@ -104,36 +102,4 @@ fun AuthNavHost(onLoggedIn: () -> Unit) {
             )
         }
     }
-}
-
-@Composable
-fun SplashScreen(vm: AppViewModel, nav: NavHostController) {
-
-    val state by vm.auth.collectAsState()
-
-    when {
-
-        state.isLoading -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    CircularProgressIndicator()
-                    Spacer(Modifier.height(12.dp))
-                    Text("Cargando...")
-                }
-            }
-        }
-
-        else -> {
-            if (state.isLoggedIn) {
-                nav.navigate(Route.Main.route) {
-                    popUpTo(Route.Splash.route) { inclusive = true }
-                }
-            } else {
-                nav.navigate(Route.Auth.route) {
-                    popUpTo(Route.Splash.route) { inclusive = true }
-                }
-            }
-        }
-    }
-
 }

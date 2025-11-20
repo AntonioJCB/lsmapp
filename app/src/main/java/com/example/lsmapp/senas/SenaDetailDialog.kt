@@ -83,7 +83,7 @@ fun SenaDetailDialog(
                     } else {
                         // Placeholder
                         Text(
-                            text = "Imagen de\n${sena.nombre}",
+                            text = "Video de\n${sena.nombre}",
                             fontSize = 14.sp,
                             color = Color.Gray,
                             textAlign = TextAlign.Center

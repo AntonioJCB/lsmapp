@@ -93,6 +93,42 @@ object SenasData {
             nombre = "Trabajo",
             imagenUrl = "https://via.placeholder.com/150",
             descripcion = "Actividad laboral"
+        ),
+        Sena(
+            id = 15,
+            nombre = "Ayuda",
+            imagenUrl = "https://via.placeholder.com/150",
+            descripcion = "Solicitar asistencia"
+        ),
+        Sena(
+            id = 16,
+            nombre = "Sentir",
+            imagenUrl = "https://via.placeholder.com/150",
+            descripcion = "Expresar emociones"
+        ),
+        Sena(
+            id = 17,
+            nombre = "Aprender",
+            imagenUrl = "https://via.placeholder.com/150",
+            descripcion = "Adquirir conocimiento"
+        ),
+        Sena(
+            id = 18,
+            nombre = "Jugar",
+            imagenUrl = "https://via.placeholder.com/150",
+            descripcion = "Actividad recreativa"
+        ),
+        Sena(
+            id = 19,
+            nombre = "Feliz",
+            imagenUrl = "https://via.placeholder.com/150",
+            descripcion = "Estado de alegría"
+        ),
+        Sena(
+            id = 20,
+            nombre = "Triste",
+            imagenUrl = "https://via.placeholder.com/150",
+            descripcion = "Estado de melancolía"
         )
     )
 }
