@@ -1,39 +1,33 @@
 package com.example.lsmapp.composables
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.lsmapp.components.BottomNavBar
 import com.example.lsmapp.navigation.Route
-import com.example.lsmapp.screens.LessonScreen
-import com.example.lsmapp.screens.ProfileScreen
-import com.example.lsmapp.screens.SettingsScreen
+import com.example.lsmapp.screens.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
-
-data class BottomItem(val route: String, val label: String, val icon: ImageVector)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScaffold(onLogoutClick: () -> Unit, onNavigateToAuth: () -> Unit) {
     val nav = rememberNavController()
-    val items = listOf(
-        BottomItem(Route.Lesson.route, "Lecciones", Icons.Filled.Home),
-        BottomItem(Route.Profile.route, "Perfil", Icons.Filled.Person),
-        BottomItem(Route.Settings.route, "Config", Icons.Filled.Settings),
-    )
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -43,7 +37,8 @@ fun MainScaffold(onLogoutClick: () -> Unit, onNavigateToAuth: () -> Unit) {
             ModalDrawerSheet {
                 Text("Navegación", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(16.dp))
                 DrawerItem(nav, label = "Lecciones", dest = Route.Lesson.route, drawerState, scope)
-                DrawerItem(nav, label = "Perfil", dest = Route.Profile.route, drawerState, scope)
+                DrawerItem(nav, label = "Señas", dest = Route.Senas.route, drawerState, scope)
+                DrawerItem(nav, label = "Ranking", dest = Route.Ranking.route, drawerState, scope)
                 DrawerItem(nav, label = "Configuración", dest = Route.Settings.route, drawerState, scope)
                 Divider()
                 NavigationDrawerItem(
@@ -51,8 +46,8 @@ fun MainScaffold(onLogoutClick: () -> Unit, onNavigateToAuth: () -> Unit) {
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        onLogoutClick()       // pone bandera en false
-                        onNavigateToAuth()    // navega inmediato al flujo Auth
+                        onLogoutClick()
+                        onNavigateToAuth()
                     }
                 )
             }
@@ -69,24 +64,23 @@ fun MainScaffold(onLogoutClick: () -> Unit, onNavigateToAuth: () -> Unit) {
                     }
                 )
             },
-            bottomBar = {
-                NavigationBar {
-                    val current = currentRoute(nav)
-                    items.forEach { item ->
-                        NavigationBarItem(
-                            selected = current == item.route,
-                            onClick = { if (current != item.route) nav.navigate(item.route) },
-                            icon = { Icon(item.icon, contentDescription = item.label) },
-                            label = { Text(item.label) }
-                        )
-                    }
-                }
-            }
+            containerColor = Color.Transparent
         ) { innerPadding ->
-            NavHost(navController = nav, startDestination = Route.Lesson.route, modifier = Modifier.padding(innerPadding)) {
-                composable(Route.Lesson.route)     { LessonScreen(navController = nav) }
-                composable(Route.Profile.route)  { ProfileScreen() }
-                composable(Route.Settings.route) { SettingsScreen() }
+            Box(modifier = Modifier.padding(innerPadding)) {
+                NavHost(
+                    navController = nav,
+                    startDestination = Route.Lesson.route,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    composable(Route.Lesson.route) { LessonScreen(navController = nav) }
+                    composable(Route.Senas.route) { SenasScreen() }
+                    composable(Route.Ranking.route) { RankingScreen() }
+                    composable(Route.Settings.route) { SettingsScreen() }
+                }
+                BottomNavBar(
+                    navController = nav,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
             }
         }
     }

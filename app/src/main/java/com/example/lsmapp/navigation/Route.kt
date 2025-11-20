@@ -16,4 +16,6 @@ sealed class Route(val route: String) {
     data object Congratulations : Route("congratulations/{lessonId}")
     data object Profile : Route("profile")
     data object Settings : Route("settings")
+    data object Senas : Route("senas")
+    data object Ranking : Route("ranking")
 }
