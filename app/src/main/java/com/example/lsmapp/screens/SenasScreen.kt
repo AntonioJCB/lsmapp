@@ -27,9 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lsmapp.R
-import com.example.lsmapp.components.NavBar
-import com.example.lsmapp.components.NavBarItem
-import com.example.lsmapp.senas.Sena // Correct import
+import com.example.lsmapp.senas.Sena
 import com.example.lsmapp.senas.SenasViewModel
 import com.example.lsmapp.senas.SenaDetailDialog
 
@@ -43,58 +41,48 @@ fun SenasScreen(
 
     var selectedSena by remember { mutableStateOf<Sena?>(null) }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        containerColor = Color(0xFF47525E),
-        bottomBar = { 
-            NavBar(selectedItem = NavBarItem.SIGNS) { 
-                // TODO: Handle navigation
-            }
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 24.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PrimaryDarkGrey)
+            .padding(horizontal = 24.dp)
+    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Señas",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier.padding(vertical = 12.dp)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 16.dp)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(
-                text = "Señas",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.padding(vertical = 12.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(4),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(bottom = 16.dp)
-            ) {
-                items(filteredSenas) { sena ->
-                    SenaCard(
-                        sena = sena,
-                        onClick = {
-                            selectedSena = sena
-                            onSenaClick(sena)
-                        }
-                    )
-                }
+            items(filteredSenas) { sena ->
+                SenaCard(
+                    sena = sena,
+                    onClick = {
+                        selectedSena = sena
+                        onSenaClick(sena)
+                    }
+                )
             }
         }
+    }
 
-        selectedSena?.let { sena ->
-            SenaDetailDialog(
-                sena = sena,
-                onDismiss = { selectedSena = null }
-            )
-        }
+    selectedSena?.let { sena ->
+        SenaDetailDialog(
+            sena = sena,
+            onDismiss = { selectedSena = null }
+        )
     }
 }
 

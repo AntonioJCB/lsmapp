@@ -10,4 +10,4 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val Accent = Color(0xFF00EDD7)
+val Accent = Color(0xFF3F51B5)

@@ -16,12 +16,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.lsmapp.data.model.Lesson
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LessonScreen(navController: NavController) {
     val lessons = listOf(
@@ -61,21 +56,23 @@ fun LessonScreen(navController: NavController) {
         )
     )
 
-    Scaffold(
-        containerColor = PrimaryDarkGrey,
-        topBar = {
-            TopAppBar(
-                title = { Text("Temas", fontWeight = FontWeight.Bold, color = TextLinkColor) },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = PrimaryDarkGrey
-                )
-            )
-        }
-    ) { innerPadding ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PrimaryDarkGrey)
+            .padding(horizontal = 16.dp)
+    ) {
+        Text(
+            text = "Temas",
+            fontWeight = FontWeight.Bold,
+            color = TextLinkColor,
+            fontSize = 32.sp,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
+
         LazyColumn(
-            contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
             items(lessons) { lesson ->
                 LessonItem(lesson = lesson) {

@@ -1,113 +1,67 @@
 package com.example.lsmapp.composables
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.lsmapp.components.NavBar
+import com.example.lsmapp.components.NavBarItem
 import com.example.lsmapp.navigation.Route
 import com.example.lsmapp.screens.LessonScreen
 import com.example.lsmapp.screens.ProfileScreen
-import com.example.lsmapp.screens.SettingsScreen
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.example.lsmapp.screens.SenasScreen
 
-
-data class BottomItem(val route: String, val label: String, val icon: ImageVector)
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScaffold(onLogoutClick: () -> Unit, onNavigateToAuth: () -> Unit) {
     val nav = rememberNavController()
-    val items = listOf(
-        BottomItem(Route.Lesson.route, "Lecciones", Icons.Filled.Home),
-        BottomItem(Route.Profile.route, "Perfil", Icons.Filled.Person),
-        BottomItem(Route.Settings.route, "Config", Icons.Filled.Settings),
-    )
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
+    
+    // Obtener la ruta actual para sincronizar el NavBar
+    val currentRoute = currentRoute(nav)
+    val selectedNavItem = when (currentRoute) {
+        Route.Lesson.route -> NavBarItem.LIST
+        Route.Senas.route -> NavBarItem.SIGNS
+        Route.Profile.route -> NavBarItem.PROFILE
+        else -> NavBarItem.LIST
+    }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Text("Navegación", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(16.dp))
-                DrawerItem(nav, label = "Lecciones", dest = Route.Lesson.route, drawerState, scope)
-                DrawerItem(nav, label = "Perfil", dest = Route.Profile.route, drawerState, scope)
-                DrawerItem(nav, label = "Configuración", dest = Route.Settings.route, drawerState, scope)
-                Divider()
-                NavigationDrawerItem(
-                    label = { Text("Cerrar sesión") },
-                    selected = false,
-                    onClick = {
-                        scope.launch { drawerState.close() }
-                        onLogoutClick()       // pone bandera en false
-                        onNavigateToAuth()    // navega inmediato al flujo Auth
+    Scaffold(
+        containerColor = Color(0xFF47525E), // Fondo oscuro del scaffold
+        bottomBar = {
+            NavBar(
+                selectedItem = selectedNavItem,
+                onItemSelected = { item ->
+                    val destination = when (item) {
+                        NavBarItem.LIST -> Route.Lesson.route
+                        NavBarItem.SIGNS -> Route.Senas.route
+                        NavBarItem.PROFILE -> Route.Profile.route
                     }
-                )
-            }
-        }
-    ) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("Template App") },
-                    navigationIcon = {
-                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                            Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                    if (currentRoute != destination) {
+                        nav.navigate(destination) {
+                            launchSingleTop = true
+                            // Evitar múltiples copias en el back stack
+                            popUpTo(Route.Lesson.route) { saveState = true }
+                            restoreState = true
                         }
                     }
-                )
-            },
-            bottomBar = {
-                NavigationBar {
-                    val current = currentRoute(nav)
-                    items.forEach { item ->
-                        NavigationBarItem(
-                            selected = current == item.route,
-                            onClick = { if (current != item.route) nav.navigate(item.route) },
-                            icon = { Icon(item.icon, contentDescription = item.label) },
-                            label = { Text(item.label) }
-                        )
-                    }
                 }
-            }
-        ) { innerPadding ->
-            NavHost(navController = nav, startDestination = Route.Lesson.route, modifier = Modifier.padding(innerPadding)) {
-                composable(Route.Lesson.route)     { LessonScreen(navController = nav) }
-                composable(Route.Profile.route)  { ProfileScreen() }
-                composable(Route.Settings.route) { SettingsScreen() }
-            }
+            )
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = nav,
+            startDestination = Route.Lesson.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(Route.Lesson.route) { LessonScreen(navController = nav) }
+            composable(Route.Senas.route) { SenasScreen() }
+            composable(Route.Profile.route) { ProfileScreen() }
         }
     }
-}
-
-@Composable
-private fun DrawerItem(
-    nav: NavHostController,
-    label: String,
-    dest: String,
-    drawerState: DrawerState,
-    scope: CoroutineScope
-) {
-    NavigationDrawerItem(
-        label = { Text(label) },
-        selected = currentRoute(nav) == dest,
-        onClick = {
-            nav.navigate(dest) { launchSingleTop = true }
-            scope.launch { drawerState.close() }
-        }
-    )
 }
 
 @Composable

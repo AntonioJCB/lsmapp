@@ -14,6 +14,7 @@ sealed class Route(val route: String) {
     data object LessonDetail : Route("lessonDetail/{lessonId}")
     data object Quiz : Route("quiz/{lessonId}")
     data object Congratulations : Route("congratulations/{lessonId}")
+    data object Senas : Route("senas")
     data object Profile : Route("profile")
     data object Settings : Route("settings")
 }
