@@ -1,5 +1,6 @@
 package com.example.lsmapp.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,13 +28,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.lsmapp.R
 import com.example.lsmapp.data.model.Lesson
+import com.example.lsmapp.ui.theme.LsmappTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +52,8 @@ fun LessonScreen(navController: NavController) {
             content = "",
             description = "Descripción de la lección 1...",
             difficulty = "Difícil",
-            expReward = 15
+            expReward = 15,
+            imageResId = R.drawable.introduccion
         ),
         Lesson(
             id = "2",
@@ -57,7 +63,8 @@ fun LessonScreen(navController: NavController) {
             content = "",
             description = "Descripción de la lección 2...",
             difficulty = "Fácil",
-            expReward = 5
+            expReward = 5,
+            imageResId = R.drawable.saludobasico
         )
     )
 
@@ -101,7 +108,7 @@ fun LessonItem(lesson: Lesson, onClick: () -> Unit) {
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = LogoContainerColor)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
@@ -109,7 +116,7 @@ fun LessonItem(lesson: Lesson, onClick: () -> Unit) {
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(16.dp),
-                color = Color.White
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Box(
@@ -117,10 +124,11 @@ fun LessonItem(lesson: Lesson, onClick: () -> Unit) {
                     .fillMaxWidth()
                     .height(200.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.LightGray)
+                Image(
+                    painter = painterResource(id = lesson.imageResId),
+                    contentDescription = lesson.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
                 )
 
                 Row(
@@ -162,5 +170,7 @@ fun LessonItem(lesson: Lesson, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun LessonScreenPreview() {
-    LessonScreen(navController = NavController(LocalContext.current))
+    LsmappTheme {
+        LessonScreen(navController = NavController(LocalContext.current))
+    }
 }
