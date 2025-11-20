@@ -17,4 +17,5 @@ sealed class Route(val route: String) {
     data object Senas : Route("senas")
     data object Profile : Route("profile")
     data object Settings : Route("settings")
+    data object Ranking : Route("ranking") // Added Ranking route
 }

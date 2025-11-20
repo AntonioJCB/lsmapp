@@ -1,5 +1,6 @@
 package com.example.lsmapp.screens.Lessons
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -33,17 +34,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.lsmapp.R
 import com.example.lsmapp.data.model.Lesson
 import com.example.lsmapp.screens.LogoContainerColor
 import com.example.lsmapp.screens.PrimaryDarkGrey
 import com.example.lsmapp.screens.TextLinkColor
+import com.example.lsmapp.ui.theme.LsmappTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,8 +68,8 @@ fun LessonDetailScreen(
                     topicId = "1",
                     videoUrl = "",
                     content = "Aprender a saludar es el primer paso para comunicarse en lengua de señas mexicana. Hoy vamos a aprender cómo decir:",
-                    difficulty = "Medium",
-                    expReward = 10,
+                    difficulty = "Difícil",
+                    expReward = 15,
                     bulletPoints = listOf("Hola", "Adiós", "¿Cómo estás?")
                 )
             )
@@ -95,8 +100,13 @@ fun LessonDetailScreen(
                             .fillMaxWidth()
                             .height(200.dp)
                             .clip(RoundedCornerShape(8.dp))
-                            .background(Color.LightGray) // Placeholder color
                     ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.saludobasico),
+                            contentDescription = lesson.title,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -107,12 +117,12 @@ fun LessonDetailScreen(
                         ) {
                             Text(
                                 text = lesson.difficulty,
-                                color = MaterialTheme.colorScheme.tertiary,
+                                color = MaterialTheme.colorScheme.error,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(8.dp))
-                                    .border(1.dp, MaterialTheme.colorScheme.tertiary, RoundedCornerShape(8.dp))
+                                    .border(1.dp, MaterialTheme.colorScheme.error, RoundedCornerShape(8.dp))
                                     .background(Color.White)
                                     .padding(horizontal = 8.dp, vertical = 4.dp)
                             )
@@ -130,7 +140,7 @@ fun LessonDetailScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = lesson.content, color = Color.White)
+                Text(text = lesson.content, color = Color.White, fontSize = 18.sp)
                 Spacer(modifier = Modifier.height(8.dp))
                 lesson.bulletPoints.forEach { point ->
                     Text(
@@ -144,10 +154,14 @@ fun LessonDetailScreen(
                 Button(
                     onClick = { navController.navigate("quiz/${lesson.id}") },
                     modifier = Modifier.align(Alignment.End),
-                    colors = ButtonDefaults.buttonColors(containerColor = LogoContainerColor)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text(text = "Empezar", color = TextLinkColor)
-                    Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null, tint = TextLinkColor)
+                    Text(text = "Empezar", color = MaterialTheme.colorScheme.onPrimary)
+                    Icon(
+                        imageVector = Icons.Default.ArrowForward,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
         }
@@ -157,8 +171,10 @@ fun LessonDetailScreen(
 @Preview(showBackground = true)
 @Composable
 fun LessonDetailScreenPreview() {
-    LessonDetailScreen(
-        navController = NavController(LocalContext.current),
-        lessonId = "1"
-    )
+    LsmappTheme {
+        LessonDetailScreen(
+            navController = NavController(LocalContext.current),
+            lessonId = "1"
+        )
+    }
 }
