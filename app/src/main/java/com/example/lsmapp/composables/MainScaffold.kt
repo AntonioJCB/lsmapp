@@ -1,6 +1,6 @@
 package com.example.lsmapp.composables
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Iconsa
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
@@ -16,7 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.lsmapp.navigation.Route
-import com.example.lsmapp.screens.HomeScreen
+import com.example.lsmapp.screens.LessonScreen
 import com.example.lsmapp.screens.ProfileScreen
 import com.example.lsmapp.screens.SettingsScreen
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +30,7 @@ data class BottomItem(val route: String, val label: String, val icon: ImageVecto
 fun MainScaffold(onLogoutClick: () -> Unit, onNavigateToAuth: () -> Unit) {
     val nav = rememberNavController()
     val items = listOf(
-        BottomItem(Route.Home.route, "Inicio", Icons.Filled.Home),
+        BottomItem(Route.Lesson.route, "Lecciones", Icons.Filled.Home),
         BottomItem(Route.Profile.route, "Perfil", Icons.Filled.Person),
         BottomItem(Route.Settings.route, "Config", Icons.Filled.Settings),
     )
@@ -42,7 +42,7 @@ fun MainScaffold(onLogoutClick: () -> Unit, onNavigateToAuth: () -> Unit) {
         drawerContent = {
             ModalDrawerSheet {
                 Text("Navegación", style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(16.dp))
-                DrawerItem(nav, label = "Inicio", dest = Route.Home.route, drawerState, scope)
+                DrawerItem(nav, label = "Lecciones", dest = Route.Lesson.route, drawerState, scope)
                 DrawerItem(nav, label = "Perfil", dest = Route.Profile.route, drawerState, scope)
                 DrawerItem(nav, label = "Configuración", dest = Route.Settings.route, drawerState, scope)
                 Divider()
@@ -83,8 +83,8 @@ fun MainScaffold(onLogoutClick: () -> Unit, onNavigateToAuth: () -> Unit) {
                 }
             }
         ) { innerPadding ->
-            NavHost(navController = nav, startDestination = Route.Home.route, modifier = Modifier.padding(innerPadding)) {
-                composable(Route.Home.route)     { HomeScreen() }
+            NavHost(navController = nav, startDestination = Route.Lesson.route, modifier = Modifier.padding(innerPadding)) {
+                composable(Route.Lesson.route)     { LessonScreen(navController = nav) }
                 composable(Route.Profile.route)  { ProfileScreen() }
                 composable(Route.Settings.route) { SettingsScreen() }
             }

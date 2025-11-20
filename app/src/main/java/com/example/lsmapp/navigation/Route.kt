@@ -10,7 +10,10 @@ sealed class Route(val route: String) {
     data object Register : Route("register")
 
     // Main internas
-    data object Home : Route("home")
+    data object Lesson : Route("lesson")
+    data object LessonDetail : Route("lessonDetail/{lessonId}")
+    data object Quiz : Route("quiz/{lessonId}")
+    data object Congratulations : Route("congratulations/{lessonId}")
     data object Profile : Route("profile")
     data object Settings : Route("settings")
 }
