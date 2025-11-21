@@ -12,8 +12,6 @@ import com.example.lsmapp.composables.MainScaffold
 import com.example.lsmapp.navigation.Route
 import com.example.lsmapp.screens.Lessons.CongratulationsScreen
 import com.example.lsmapp.screens.Lessons.LessonDetailScreen
-import com.example.lsmapp.screens.Lessons.CongratulationsScreen
-import com.example.lsmapp.screens.Lessons.LessonDetailScreen
 import com.example.lsmapp.screens.Lessons.QuizScreen
 import com.example.lsmapp.screens.LoginScreen
 import com.example.lsmapp.screens.RegisterScreen

@@ -80,32 +80,21 @@ private fun SenaCard(
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        if (sena.id == 1) {
-            Image(
-                painter = painterResource(R.drawable.logo),
-                contentDescription = sena.nombre,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(16.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = sena.nombre,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.DarkGray,
+                textAlign = TextAlign.Center,
+                lineHeight = 14.sp
             )
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = sena.nombre,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.DarkGray,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 14.sp
-                )
-            }
         }
     }
 }

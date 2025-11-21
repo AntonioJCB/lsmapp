@@ -102,4 +102,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.4")
     // Icons
     implementation("androidx.compose.material:material-icons-extended:1.6.7")
+    
+    // ExoPlayer
+    implementation("androidx.media3:media3-exoplayer:1.2.0")
+    implementation("androidx.media3:media3-ui:1.2.0")
+    implementation("androidx.media3:media3-common:1.2.0")
 }

@@ -47,7 +47,6 @@ import com.example.lsmapp.R
 import com.example.lsmapp.data.model.Lesson
 import com.example.lsmapp.screens.LogoContainerColor
 import com.example.lsmapp.screens.PrimaryDarkGrey
-import com.example.lsmapp.screens.TextLinkColor
 import com.example.lsmapp.ui.theme.LsmappTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,7 +79,14 @@ fun LessonDetailScreen(
         containerColor = PrimaryDarkGrey,
         topBar = {
             TopAppBar(
-                title = { Text(uiState.lesson?.title ?: "", color = TextLinkColor) },
+                title = {
+                    Text(
+                        text = uiState.lesson?.title ?: "",
+                        style = MaterialTheme.typography.headlineMedium, // Estilo de título consistente
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White // Título en blanco
+                    )
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = PrimaryDarkGrey)
             )
         }
@@ -139,15 +145,15 @@ fun LessonDetailScreen(
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = lesson.content, color = Color.White, fontSize = 18.sp)
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(24.dp)) // Espacio aumentado
+                Text(text = lesson.content, color = Color.White, fontSize = 22.sp) // Letra más grande
+                Spacer(modifier = Modifier.height(16.dp)) // Espacio aumentado
                 lesson.bulletPoints.forEach { point ->
                     Text(
                         text = "• $point",
-                        color = TextLinkColor,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(bottom = 4.dp)
+                        color = Color.White, // Letra en blanco
+                        fontSize = 20.sp, // Letra más grande
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -156,7 +162,7 @@ fun LessonDetailScreen(
                     modifier = Modifier.align(Alignment.End),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text(text = "Empezar", color = MaterialTheme.colorScheme.onPrimary)
+                    Text(text = "Empezar", color = MaterialTheme.colorScheme.onPrimary, fontSize = 16.sp)
                     Icon(
                         imageVector = Icons.Default.ArrowForward,
                         contentDescription = null,
