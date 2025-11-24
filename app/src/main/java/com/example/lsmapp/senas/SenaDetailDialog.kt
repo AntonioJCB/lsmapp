@@ -177,7 +177,8 @@ private fun SenaDetailDialogPreview() {
         nombre = "Comer",
         imagenUrl = "",
         videoUrl = "https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4",
-        descripcion = "Acción de alimentarse"
+        descripcion = "Acción de alimentarse",
+        categoria = SenaCategory.VERBOS_COMUNES
     )
     SenaDetailDialog(
         sena = senaEjemplo,
@@ -193,7 +194,8 @@ private fun SenaDetailDialogPreviewNoVideo() {
         nombre = "Gracias",
         imagenUrl = "",
         videoUrl = null,
-        descripcion = "Expresión de agradecimiento"
+        descripcion = "Expresión de agradecimiento",
+        categoria = SenaCategory.VERBOS_COMUNES
     )
     SenaDetailDialog(
         sena = senaEjemplo,

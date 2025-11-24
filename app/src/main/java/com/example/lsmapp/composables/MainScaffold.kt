@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,12 +18,15 @@ import com.example.lsmapp.screens.LessonScreen
 import com.example.lsmapp.screens.ProfileScreen
 import com.example.lsmapp.screens.RankingScreen
 import com.example.lsmapp.screens.SenasScreen
+import com.example.lsmapp.senas.SenasViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScaffold(mainNavController: NavHostController) { // Accept the main NavController
     val innerNavController = rememberNavController() // A new NavController for the bottom bar
     val currentRoute = currentRoute(innerNavController)
+
+    val senasViewModel: SenasViewModel = viewModel()
 
     val title = when (currentRoute) {
         Route.Lesson.route -> "Temas"
@@ -58,7 +62,7 @@ fun MainScaffold(mainNavController: NavHostController) { // Accept the main NavC
         ) {
             // Pass the MAIN NavController to the screens that need to navigate outside the scaffold
             composable(Route.Lesson.route) { LessonScreen(navController = mainNavController) }
-            composable(Route.Senas.route) { SenasScreen() }
+            composable(Route.Senas.route) { SenasScreen(viewModel = senasViewModel) }
             composable(Route.Ranking.route) { RankingScreen() }
             composable(Route.Profile.route) { ProfileScreen() }
         }
