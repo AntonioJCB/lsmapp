@@ -26,13 +26,14 @@ fun MainScaffold(mainNavController: NavHostController) { // Accept the main NavC
     val innerNavController = rememberNavController() // A new NavController for the bottom bar
     val currentRoute = currentRoute(innerNavController)
 
+    // Crear el ViewModel aquí para compartirlo
     val senasViewModel: SenasViewModel = viewModel()
 
     val title = when (currentRoute) {
         Route.Lesson.route -> "Temas"
         Route.Senas.route -> "Señas"
         Route.Ranking.route -> "Ranking"
-        Route.Profile.route -> "Perfil"
+        Route.Profile.route -> "Usuario"
         else -> ""
     }
 
